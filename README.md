@@ -6,7 +6,7 @@ Built as a project for the **Cloud Computing** course of the M.Sc. Professional 
 
 ## Architecture
 
-![Architecture diagram](architecture.png)
+![Architecture diagram](YIGIT_PEKER_CLOUD_PRJ.png)
 
 All resources run in the AWS region **eu-west-1 (Ireland)**.
 
