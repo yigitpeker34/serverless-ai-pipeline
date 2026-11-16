@@ -15,11 +15,10 @@ All resources run in the AWS region **eu-west-1 (Ireland)**.
 | Stage | What happens |
 |---|---|
 | CI/CD | GitHub Actions automatically deploys the backend code to the Lambda function and the frontend code to the website S3 bucket. |
-| Ingestion | A text file containing a customer review is uploaded to the raw-data S3 bucket. |
+| Ingestion | A text file with customer reviews (one review per line) is uploaded to the raw-data S3 bucket. |
 | Trigger | The upload event automatically invokes the Lambda function. |
-| AI analysis | Lambda calls Amazon Comprehend to detect the language and sentiment of the text (the architecture also includes Amazon Translate). |
-| Alerting | If the sentiment is NEGATIVE, Lambda publishes to an Amazon SNS topic, which sends an email notification to the administrator. |
-| Storage | Lambda saves the result (sentiment, confidence score, language) as a JSON file in the processed-data S3 bucket. |
+| AI analysis | Lambda processes the file line by line. For each review, Amazon Translate detects the source language and translates the text to English, then Amazon Comprehend runs sentiment analysis on the English text. |
+| Storage | Lambda writes one JSON object per review (JSON Lines) with original text, detected language, English translation, sentiment and confidence score to the processed-data S3 bucket, so Athena can read each row. |
 | Analytics | An AWS Glue crawler scans the processed bucket and updates the schema, so the data can be queried with SQL in Amazon Athena. |
 | Visualization | An Amazon QuickSight dashboard is embedded in a static website hosted on S3. |
 
@@ -31,8 +30,8 @@ The Lambda function runs under a dedicated IAM role that gives it access to S3 a
 |---|---|
 | Amazon S3 | Raw data, processed data and static website hosting |
 | AWS Lambda | Event-driven processing logic |
-| Amazon Comprehend | Language and sentiment detection |
-| Amazon Translate | Text translation |
+| Amazon Comprehend | Sentiment analysis |
+| Amazon Translate | Automatic language detection and translation to English |
 | Amazon SNS | Email alerts for negative feedback |
 | AWS Glue | Crawler that maintains the data schema |
 | Amazon Athena | SQL queries on the processed data |
