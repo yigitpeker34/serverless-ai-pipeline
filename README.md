@@ -21,7 +21,7 @@ All resources run in the AWS region **eu-west-1 (Ireland)**.
 | 5. Alerting | If the sentiment is NEGATIVE, Lambda publishes to an Amazon SNS topic, which sends an email notification to the administrator. |
 | 6. Storage | Lambda saves the result (sentiment, confidence score, language) as a JSON file in the processed-data S3 bucket. |
 | 7. Analytics | An AWS Glue crawler scans the processed bucket and updates the schema, so the data can be queried with SQL in Amazon Athena. |
-| 8. Visualization | An Amazon QuickSight dashboard is embedded in a static website hosted on S3. |
+| 8.  Visualization | An Amazon QuickSight dashboard is embedded in a static website hosted on S3. |
 
 The Lambda function runs under a dedicated IAM role that gives it access to S3 and the AI services.
 
